@@ -1,4 +1,3 @@
-// Profile.tsx
 import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
