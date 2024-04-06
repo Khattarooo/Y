@@ -1,4 +1,3 @@
-// authSlice.ts
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface UserData {
@@ -6,6 +5,10 @@ interface UserData {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
 }
 
 interface UserState {
