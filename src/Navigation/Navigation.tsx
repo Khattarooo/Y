@@ -1,16 +1,19 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import TabNavigation from './TabNavigation';
 import InitialNavigation from './InitialNavigation';
+import TabNavigation from './TabNavigation';
+import {selectIsAuthenticated} from '../Redux/slices/authSlice';
 import {useSelector} from 'react-redux';
 import {RootState} from '../Redux/store';
 
 const Navigation = () => {
-  const userData = useSelector((state: RootState) => state.auth.userData);
+  const isAuthenticated = useSelector((state: RootState) =>
+    selectIsAuthenticated(state),
+  );
 
   return (
     <NavigationContainer>
-      {userData ? <TabNavigation /> : <InitialNavigation />}
+      {isAuthenticated ? <TabNavigation /> : <InitialNavigation />}
     </NavigationContainer>
   );
 };

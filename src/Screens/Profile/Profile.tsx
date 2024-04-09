@@ -1,36 +1,23 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {View, Text} from 'react-native';
+import {useSelector} from 'react-redux';
 import {RootState} from '../../Redux/store';
-import {logout} from '../../Redux/slices/authSlice';
 
 const Profile = () => {
-  const dispatch = useDispatch();
-  const userData = useSelector((state: RootState) => state.auth.userData);
+  const userData = useSelector((state: RootState) => state.user);
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
+  const {username, email, firstName, lastName, gender} = userData;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Username: {userData?.username}</Text>
-      <Text style={styles.text}>Email: {userData?.email}</Text>
-      <Button title="Logout" onPress={handleLogout} />
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text style={{fontSize: 24, marginBottom: 10}}>Profile</Text>
+      <Text>Username: {username}</Text>
+      <Text>Email: {email}</Text>
+      <Text>First Name: {firstName}</Text>
+      <Text>Last Name: {lastName}</Text>
+      <Text>Gender: {gender}</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-});
 
 export default Profile;

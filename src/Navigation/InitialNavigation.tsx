@@ -1,18 +1,12 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import Registration from '../Screens/Registration/Registration';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../Screens/Login/Login';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-const MainNavigation = () => {
+const InitialNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName="Registration">
-      <Stack.Screen
-        name="Registration"
-        component={Registration}
-        options={{headerShown: false}}
-      />
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={Login}
@@ -22,4 +16,4 @@ const MainNavigation = () => {
   );
 };
 
-export default MainNavigation;
+export default InitialNavigation;

@@ -1,40 +1,52 @@
 import React from 'react';
 import {FlatList, Text, View, StyleSheet, ImageBackground} from 'react-native';
 
-interface Post {
-  id: string;
-  author: string;
-  content: string;
-}
-
-const mockData: Post[] = [
-  {id: '1', author: 'User1', content: 'This is the first post'},
-  {id: '2', author: 'User2', content: 'This is the second post'},
-  {id: '3', author: 'User3', content: 'This is the third post'},
-  {id: '4', author: 'User1', content: 'This is the first post'},
-  {id: '5', author: 'User2', content: 'This is the second post'},
-  {id: '6', author: 'User3', content: 'This is the third post'},
-  {id: '7', author: 'User1', content: 'This is the first post'},
-  {id: '8', author: 'User2', content: 'This is the second post'},
-  {id: '9', author: 'User3', content: 'This is the third post'},
+const posts = [
+  {
+    id: '1',
+    author: 'Sally',
+    date: 'Mar 28, 2022',
+    content: 'It was great catching up with my bestie',
+    likes: 20,
+    comments: 3,
+    shares: 1,
+  },
+  {
+    id: '2',
+    author: 'Sally',
+    date: 'Mar 28, 2022',
+    content: 'It was great day',
+    likes: 1,
+    comments: 3,
+    shares: 1,
+  },
 ];
 
-const Home: React.FC = () => {
-  const renderItem = ({item}: {item: Post}) => (
+const Post = ({author, date, content, likes, comments, shares}) => {
+  return (
     <View style={styles.postContainer}>
-      <Text style={styles.author}>{item.author}</Text>
-      <Text>{item.content}</Text>
+      <Text style={styles.author}>{author}</Text>
+      <Text style={styles.date}>{date}</Text>
+      <Text style={styles.content}>{content}</Text>
+      <View style={styles.interactionBar}>
+        <Text style={styles.interactionText}>❤️ {likes}</Text>
+        <Text style={styles.interactionText}>💬 {comments}</Text>
+        <Text style={styles.interactionText}>🔗 {shares}</Text>
+      </View>
     </View>
   );
+};
 
+// Home Component
+const Home = () => {
   return (
     <ImageBackground
       source={require('../../assets/w1.jpg')}
       style={styles.backgroundImage}
       blurRadius={2}>
       <FlatList
-        data={mockData}
-        renderItem={renderItem}
+        data={posts}
+        renderItem={({item}) => <Post {...item} />}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
       />
@@ -42,6 +54,7 @@ const Home: React.FC = () => {
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
   listContainer: {
     padding: 20,
@@ -49,13 +62,34 @@ const styles = StyleSheet.create({
   postContainer: {
     marginBottom: 15,
     padding: 20,
-    backgroundColor: '#20a1e1',
+    backgroundColor: '#ffffff',
     borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.9,
+    shadowRadius: 3.8,
+    elevation: 10,
   },
   author: {
     fontWeight: 'bold',
-    opacity: 1,
-    color: 'white',
+    fontSize: 18,
+  },
+  date: {
+    fontSize: 14,
+    color: 'grey',
+    marginBottom: 10,
+  },
+  content: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  interactionBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  interactionText: {
+    fontSize: 20,
+    color: 'grey',
   },
   backgroundImage: {
     flex: 1,

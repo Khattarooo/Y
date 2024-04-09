@@ -26,6 +26,7 @@ export default function App() {
           name="Home"
           component={Home}
           options={{
+            headerTitleAlign: 'center',
             tabBarIcon: () => (
               <Image
                 source={require('../assets/home1.png')}
