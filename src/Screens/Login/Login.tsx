@@ -3,21 +3,23 @@ import {
   View,
   Text,
   TextInput,
-  StyleSheet,
   ImageBackground,
   ActivityIndicator,
-  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import CustomButton from '../../Components/Atoms/Button';
 import {useDispatch} from 'react-redux';
 import {setAuthState} from '../../Redux/slices/authSlice';
 import {setUserData} from '../../Redux/slices/userSlice';
-
+import {useToast} from 'react-native-toast-notifications';
 import axios from 'axios';
+import styles from './LoginStyle';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('kminchelle');
+  const [password, setPassword] = useState('0lelplR');
+  const toast = useToast();
 
   const [loading, setLoading] = useState(false);
 
@@ -45,8 +47,15 @@ const Login = () => {
           image: result.data.image,
         }),
       );
+      toast.show('Login Successful', {
+        type: 'success',
+        animationType: 'zoom-in',
+      });
     } catch (err) {
-      Alert.alert('Invalid Username or Password');
+      toast.show('Invalid Username or Password', {
+        type: 'danger',
+        animationType: 'zoom-in',
+      });
       console.log(err);
     } finally {
       setLoading(false);
@@ -57,72 +66,40 @@ const Login = () => {
     <ImageBackground
       source={require('../../assets/w1.jpg')}
       style={styles.background}>
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.heading}>Login</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          {loading ? (
-            <ActivityIndicator />
-          ) : (
-            <CustomButton title="Login" onPress={onLogin} />
-          )}
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={styles.container}>
+          <View style={styles.content}>
+            <Text style={styles.heading}>Login</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+              returnKeyType="next"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            {loading ? (
+              <ActivityIndicator
+                animating={true}
+                size={'large'}
+                color={'#20a1e1'}
+              />
+            ) : (
+              <CustomButton title="Login" onPress={onLogin} />
+            )}
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  background: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  content: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 30,
-    padding: 20,
-    alignItems: 'center',
-  },
-  heading: {
-    fontSize: 24,
-    marginBottom: 20,
-    color: 'gray',
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    backgroundColor: 'white',
-  },
-  signInText: {
-    marginTop: 20,
-    color: 'blue',
-    textDecorationLine: 'underline',
-    alignSelf: 'center',
-  },
-});
 
 export default Login;

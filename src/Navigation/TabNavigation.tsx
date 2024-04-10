@@ -1,9 +1,11 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../Screens/Home/Home';
-import Posts from '../Screens/Posts/Posts';
 import Profile from '../Screens/Profile/Profile';
 import {Image, ImageBackground} from 'react-native';
+import AddPostStackScreen from './AddPostNavigation';
+import Search from '../Screens/SearchScreen/Search';
+import SavedPosts from '../Screens/SavedPosts/SavedPost';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,6 +14,7 @@ export default function App() {
     <ImageBackground source={require('../assets/w1.jpg')} style={{flex: 1}}>
       <Tab.Navigator
         screenOptions={{
+          headerTitleAlign: 'center',
           tabBarStyle: {
             marginVertical: 8,
             marginHorizontal: 10,
@@ -19,6 +22,7 @@ export default function App() {
             borderRadius: 30,
             overflow: 'hidden',
           },
+          tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
           tabBarActiveBackgroundColor: '#20a1e1',
         }}>
@@ -26,7 +30,6 @@ export default function App() {
           name="Home"
           component={Home}
           options={{
-            headerTitleAlign: 'center',
             tabBarIcon: () => (
               <Image
                 source={require('../assets/home1.png')}
@@ -36,13 +39,39 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Posts"
-          component={Posts}
+          name="Search"
+          component={Search}
           options={{
             tabBarIcon: () => (
               <Image
-                source={require('../assets/add.png')}
-                style={{width: 40, height: 40}}
+                source={require('../assets/search.png')}
+                style={{width: 30, height: 30}}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="AddPostStackScreen"
+          component={AddPostStackScreen}
+          options={{
+            headerTitle: 'Create Post',
+            tabBarIcon: () => (
+              <Image
+                source={require('../assets/camera.png')}
+                style={{width: 30, height: 30}}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="SavedPosts"
+          component={SavedPosts}
+          options={{
+            headerTitle: 'Create Post',
+            tabBarIcon: () => (
+              <Image
+                source={require('../assets/save.png')}
+                style={{width: 30, height: 30}}
               />
             ),
           }}

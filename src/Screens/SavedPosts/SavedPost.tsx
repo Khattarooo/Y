@@ -4,6 +4,8 @@ import {
   StyleSheet,
   ImageBackground,
   RefreshControl,
+  Text,
+  View,
 } from 'react-native';
 import axios from 'axios';
 import PostCard from '../../Components/Organisime/PostCard';
@@ -21,73 +23,73 @@ interface Post {
   time: number;
 }
 
-const Home = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+const SavedPosts: React.FC = () => {
+  const [savedPosts, setSavedPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(1);
-  const pageSize = 2;
-  const fetchPosts = useCallback(async () => {
-    setRefreshing(true);
+  const [loading, setLoading] = useState(true); // New state to track loading status
+
+  const fetchSavedPosts = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `https://660e99fb356b87a55c4f8cb9.mockapi.io/posts?page=${page}&limit=${pageSize}`,
+      const response = await axios.get<Post[]>(
+        'https://660e99fb356b87a55c4f8cb9.mockapi.io/posts?isSaved=true',
       );
-      if (page === 1) {
-        setPosts(response.data);
-      } else {
-        setPosts(prevPosts => [...prevPosts, ...response.data]);
-      }
+      setSavedPosts(response.data);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      setSavedPosts([]);
     } finally {
+      setLoading(false); // Update loading state after fetching posts
       setRefreshing(false);
     }
-  }, [page]);
+  }, []);
 
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchPosts();
-    setPage(1);
-    setRefreshing(false);
-  }, [fetchPosts]);
+    fetchSavedPosts();
+  }, [fetchSavedPosts]);
+
+  useEffect(() => {
+    fetchSavedPosts();
+  }, [fetchSavedPosts]);
 
   const handleSavePost = async (postId: string) => {
     try {
-      const updatedPosts = posts.map(post => {
+      const updatedPosts = savedPosts.map(post => {
         if (post.id === postId) {
           return {...post, isSaved: !post.isSaved};
         }
         return post;
       });
-      setPosts(updatedPosts);
+      setSavedPosts(updatedPosts);
+
+      const postToUpdate = savedPosts.find(post => post.id === postId);
+      if (!postToUpdate) return;
 
       const response = await axios.put(
         `https://660e99fb356b87a55c4f8cb9.mockapi.io/posts/${postId}`,
-        {isSaved: !posts.find(post => post.id === postId)?.isSaved},
+        {isSaved: !postToUpdate.isSaved},
       );
-      console.log('Post saved successfully:', response.data);
+      console.log('Post saved status updated successfully:', response.data);
     } catch (error) {
-      console.error('Error saving post:', error);
+      console.error('Error updating saved post status:', error);
     }
   };
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
 
   return (
     <ImageBackground
       source={require('../../assets/w1.jpg')}
       style={styles.backgroundImage}
       blurRadius={1}>
+      {savedPosts.length === 0 && !loading && (
+        <View style={styles.centeredContainer}>
+          <View style={styles.noPostsContainer}>
+            <Text style={styles.noPostsText}>No Saved Posts</Text>
+          </View>
+        </View>
+      )}
       <FlatList
-        data={posts}
-        renderItem={({item, index}) => (
+        data={savedPosts}
+        renderItem={({item}) => (
           <PostCard
-            key={item.id + index}
             firstName={item.firstName}
             lastName={item.lastName}
             date={item.date}
@@ -96,16 +98,14 @@ const Home = () => {
             image={item.image}
             tags={item.tags}
             username={''}
-            id={''}
+            id={item.id}
             displayImage={!!item.path}
             displayDescription={!!item.description}
             isSaved={item.isSaved || false}
             onSave={() => handleSavePost(item.id)}
           />
         )}
-        keyExtractor={(item, index) => item.id + index}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
+        keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
           <RefreshControl
@@ -113,7 +113,7 @@ const Home = () => {
             onRefresh={handleRefresh}
             colors={['#20a1e1', '#20a1e1']}
             tintColor="#20a1e1"
-            title="Refreshing..."
+            title="Pull to Refresh"
             titleColor="#000"
           />
         }
@@ -130,6 +130,21 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
   },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noPostsContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  noPostsText: {
+    fontSize: 18,
+    color: '#333',
+  },
 });
 
-export default Home;
+export default SavedPosts;
