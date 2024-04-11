@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   View,
-  Text,
   TextInput,
   ImageBackground,
   ActivityIndicator,
@@ -55,7 +54,6 @@ const Login = () => {
         type: 'danger',
         animationType: 'zoom-in',
       });
-      console.log(err);
     } finally {
       setLoading(false);
     }
