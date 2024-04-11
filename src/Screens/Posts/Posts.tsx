@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ImageBackground,
+  Text,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CameraIcon from '../../assets/camera.svg';
@@ -31,7 +32,11 @@ const Posts = () => {
   const handleCamera = () => {
     navigation.navigate('CameraScreen');
   };
-
+  const handleClearImage = () => {
+    setImagePath(undefined);
+    setDescription('');
+    setTags('');
+  };
   const handlePost = async () => {
     if (!description || !tags.trim()) {
       toast.show('Please fill all the required fields.', {
@@ -99,6 +104,7 @@ const Posts = () => {
               body: 'Your post has been uploaded successfully!',
               android: {
                 channelId: 'default',
+                pressAction: {id: 'default', launchActivity: 'default'},
               },
             });
           } catch (error) {
@@ -145,6 +151,11 @@ const Posts = () => {
               {imagePath ? (
                 <View style={styles.imageContainer}>
                   <Image source={{uri: imagePath}} style={styles.image} />
+                  <TouchableOpacity
+                    style={styles.clearImageButton}
+                    onPress={handleClearImage}>
+                    <Text style={styles.clearImageText}>X</Text>
+                  </TouchableOpacity>
                 </View>
               ) : (
                 <TouchableOpacity onPress={handleCamera}>

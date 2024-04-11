@@ -13,6 +13,21 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     borderRadius: 15,
   },
+  clearImageButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'red',
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  clearImageText: {
+    color: 'white',
+    fontSize: 18,
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
