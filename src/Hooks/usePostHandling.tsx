@@ -42,10 +42,7 @@ export const usePostHandling = () => {
         return post;
       });
       setPosts(updatedPosts);
-      toast.show('Post Saved', {
-        type: 'success',
-        animationType: 'zoom-in',
-      });
+
       await savePost(postId, !posts.find(post => post.id === postId)?.isSaved);
     } catch (error) {
       toast.show('Error saving post', {

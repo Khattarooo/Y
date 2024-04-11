@@ -58,8 +58,6 @@ const SavedPosts: React.FC = () => {
         `https://660e99fb356b87a55c4f8cb9.mockapi.io/posts/${postId}`,
         {isSaved: !postToUpdate.isSaved},
       );
-
-      console.log('Post saved status updated successfully:', response.data);
     } catch (error) {
       toast.show('Error updating saved post status', {
         type: 'danger',

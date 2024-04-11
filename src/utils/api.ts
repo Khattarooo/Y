@@ -14,7 +14,6 @@ export const fetchPosts = async (
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching posts:', error);
     throw error;
   }
 };
@@ -25,9 +24,7 @@ export const savePost = async (
 ): Promise<void> => {
   try {
     await axios.put(`${base_url}/posts/${postId}`, {isSaved});
-    console.log('Post saved successfully');
   } catch (error) {
-    console.error('Error saving post:', error);
     throw error;
   }
 };
