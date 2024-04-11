@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   content: {
     width: '80%',
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 15,
     padding: 20,
     alignItems: 'flex-start',
     elevation: 3,

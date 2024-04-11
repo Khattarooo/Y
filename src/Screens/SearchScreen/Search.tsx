@@ -8,19 +8,9 @@ import {
   Text,
 } from 'react-native';
 import axios from 'axios';
-import PostCard from '../../Components/Organisime/PostCard';
+import PostCard from '../../Components/Organisime/PostCard/PostCard';
 import styles from './SearchStyles';
-
-interface Post {
-  id: string;
-  firstName: string;
-  lastName: string;
-  date: number;
-  description: string;
-  path: string;
-  image: string;
-  tags: string[];
-}
+import {Post} from '../../utils/types';
 
 const Search = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -99,6 +89,14 @@ const Search = () => {
         <View style={styles.centeredContainer}>
           <View style={styles.noPostsContainer}>
             <Text style={styles.noPostsText}>No posts found</Text>
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={['#20a1e1', '#20a1e1']}
+              tintColor="#20a1e1"
+              title="Refreshing..."
+              titleColor="#000"
+            />
           </View>
         </View>
       ) : (
@@ -113,10 +111,9 @@ const Search = () => {
               path={item.path}
               image={item.image}
               tags={item.tags}
-              username={''}
-              id={''}
               displayImage={!!item.path}
               displayDescription={!!item.description}
+              showSaveButton={false}
             />
           )}
           keyExtractor={item => item.id}

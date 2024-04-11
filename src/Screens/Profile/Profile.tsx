@@ -5,19 +5,24 @@ import {RootState} from '../../Redux/store';
 import {logout} from '../../Redux/slices/authSlice';
 import CustomButton from '../../Components/Atoms/Button';
 import styles from './ProfileStyles';
+import {useToast} from 'react-native-toast-notifications';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.user);
+  const toast = useToast();
   const {username, email, firstName, lastName, image, gender} = userData;
   const handleLogout = () => {
     dispatch(logout());
+    toast.show('Logout Successful', {
+      type: 'success',
+      animationType: 'zoom-in',
+    });
   };
   return (
     <ImageBackground
-      source={require('../../assets/w1.jpg')}
-      style={styles.backgroundImage}
-      blurRadius={1}>
+      source={require('../../assets/w2.jpg')}
+      style={styles.backgroundImage}>
       <View style={styles.container}>
         <View style={styles.content}>
           {image && (

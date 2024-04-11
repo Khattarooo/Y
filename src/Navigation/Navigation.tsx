@@ -1,13 +1,13 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import InitialNavigation from './InitialNavigation';
-import TabNavigation from './TabNavigation';
 import {selectIsAuthenticated} from '../Redux/slices/authSlice';
 import {useSelector} from 'react-redux';
 import {RootState} from '../Redux/store';
 import {Platform} from 'react-native';
 import notifee, {AndroidChannel} from '@notifee/react-native';
-// import DrawerNavigation from './DrawerNavigation';
+import DrawerNavigation from './DrawerNavigation';
+import {linking} from '../utils/linkingconfig';
 
 const Navigation = () => {
   const isAuthenticated = useSelector((state: RootState) =>
@@ -27,8 +27,8 @@ const Navigation = () => {
   createDefaultChannel();
 
   return (
-    <NavigationContainer>
-      {isAuthenticated ? <TabNavigation /> : <InitialNavigation />}
+    <NavigationContainer linking={linking}>
+      {isAuthenticated ? <DrawerNavigation /> : <InitialNavigation />}
     </NavigationContainer>
   );
 };

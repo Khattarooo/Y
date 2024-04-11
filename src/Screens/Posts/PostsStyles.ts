@@ -2,8 +2,16 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 20,
+    marginHorizontal: 20,
     alignItems: 'center',
+    backgroundColor: 'white',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    borderRadius: 15,
   },
   input: {
     borderWidth: 1,
@@ -12,8 +20,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
   },
+  background: {
+    flex: 1,
+  },
   imageContainer: {
-    width: '80%',
+    width: '100%',
     marginBottom: 10,
   },
   image: {
@@ -25,9 +36,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 15,
     width: '100%',
     height: 200,
+    backgroundColor: '#f5f5f5',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
   },
 });
 export default styles;

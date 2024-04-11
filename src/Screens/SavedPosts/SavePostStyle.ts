@@ -8,23 +8,12 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
   },
-  searchInput: {
-    backgroundColor: '#fff',
-    padding: 15,
-    margin: 10,
-    borderRadius: 15,
-    fontSize: 20,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.4,
-    shadowRadius: 3.84,
-  },
   noPostsContainer: {
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   noPostsText: {
     fontSize: 18,
@@ -36,5 +25,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
 export default styles;

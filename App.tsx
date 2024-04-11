@@ -3,6 +3,7 @@ import store from './src/Redux/store';
 import Navigation from './src/Navigation/Navigation';
 import {Provider} from 'react-redux';
 import {ToastProvider} from 'react-native-toast-notifications';
+import 'react-native-gesture-handler';
 
 const App = () => {
   return (

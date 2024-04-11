@@ -1,17 +1,43 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import Home from '../Screens/Home/Home';
-import Profile from '../Screens/Profile/Profile';
-import {Image, ImageBackground} from 'react-native';
 import AddPostStackScreen from './AddPostNavigation';
-import Search from '../Screens/SearchScreen/Search';
 import SavedPosts from '../Screens/SavedPosts/SavedPost';
+import {useNavigation} from '@react-navigation/native';
+import Search from '../Screens/SearchScreen/Search';
+import {
+  CameraIcon,
+  HomeIcon,
+  SaveIcon,
+  SearchIcon,
+  LogoIconHeader,
+} from '../Components/Atoms/Icon';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const navigation = useNavigation();
+
+  const openDrawer = () => {
+    navigation.toggleDrawer();
+  };
+
+  const renderLeftButton = () => (
+    <TouchableOpacity onPress={openDrawer} style={styles.touchable}>
+      <Image source={require('../assets/menu.png')} style={styles.leftButton} />
+    </TouchableOpacity>
+  );
+
   return (
-    <ImageBackground source={require('../assets/w1.jpg')} style={{flex: 1}}>
+    <ImageBackground
+      source={require('../assets/w1.jpg')}
+      style={styles.background}>
       <Tab.Navigator
         screenOptions={{
           headerTitleAlign: 'center',
@@ -27,68 +53,54 @@ export default function App() {
           tabBarActiveBackgroundColor: '#20a1e1',
         }}>
         <Tab.Screen
-          name="Home"
+          name=" "
           component={Home}
           options={{
-            tabBarIcon: () => (
-              <Image
-                source={require('../assets/home1.png')}
-                style={{width: 30, height: 30}}
-              />
-            ),
+            headerTitle: LogoIconHeader,
+            tabBarIcon: HomeIcon,
+            headerLeft: renderLeftButton,
+          }}
+        />
+
+        <Tab.Screen
+          name="AddPostStackScreen"
+          component={AddPostStackScreen}
+          options={{
+            headerTitle: 'Create Post',
+            tabBarIcon: CameraIcon,
+            headerLeft: renderLeftButton,
           }}
         />
         <Tab.Screen
           name="Search"
           component={Search}
           options={{
-            tabBarIcon: () => (
-              <Image
-                source={require('../assets/search.png')}
-                style={{width: 30, height: 30}}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="AddPostStackScreen"
-          component={AddPostStackScreen}
-          options={{
-            headerTitle: 'Create Post',
-            tabBarIcon: () => (
-              <Image
-                source={require('../assets/camera.png')}
-                style={{width: 30, height: 30}}
-              />
-            ),
+            tabBarIcon: SearchIcon,
+            headerLeft: renderLeftButton,
           }}
         />
         <Tab.Screen
           name="SavedPosts"
           component={SavedPosts}
           options={{
-            headerTitle: 'Create Post',
-            tabBarIcon: () => (
-              <Image
-                source={require('../assets/save.png')}
-                style={{width: 30, height: 30}}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarIcon: () => (
-              <Image
-                source={require('../assets/profile.png')}
-                style={{width: 30, height: 30}}
-              />
-            ),
+            headerTitle: 'Saved Post',
+            tabBarIcon: SaveIcon,
+            headerLeft: renderLeftButton,
           }}
         />
       </Tab.Navigator>
     </ImageBackground>
   );
 }
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  leftButton: {
+    height: 30,
+    width: 30,
+  },
+  touchable: {
+    marginLeft: 10,
+  },
+});

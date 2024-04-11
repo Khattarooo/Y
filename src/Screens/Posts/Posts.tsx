@@ -1,5 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {View, TextInput, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  ImageBackground,
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CameraIcon from '../../assets/camera.svg';
 import {useSelector} from 'react-redux';
@@ -8,20 +16,7 @@ import axios from 'axios';
 import notifee from '@notifee/react-native';
 import styles from './PostsStyles';
 import {useToast} from 'react-native-toast-notifications';
-
-interface RouteParams {
-  imagePath?: string;
-}
-interface UserData {
-  id: number | null;
-  username: string | null;
-  email: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  gender: string | null;
-  image: string | null;
-  date: Date;
-}
+import {UserData, RouteParams} from '../../utils/types';
 
 const Posts = () => {
   const navigation = useNavigation();
@@ -32,6 +27,7 @@ const Posts = () => {
   const [tags, setTags] = useState('');
   const [imagePath, setImagePath] = useState<string | undefined>(undefined);
   const toast = useToast();
+
   const handleCamera = () => {
     navigation.navigate('CameraScreen');
   };
@@ -89,9 +85,12 @@ const Posts = () => {
           'https://660e99fb356b87a55c4f8cb9.mockapi.io/posts',
           postData,
         );
-        console.log('Post uploaded successfully:', response.data);
+        toast.show('Post uploaded successfully.', {
+          type: 'success',
+          animationType: 'zoom-in',
+        });
 
-        navigation.navigate('Home');
+        navigation.navigate(' ');
 
         setTimeout(async () => {
           try {
@@ -103,11 +102,17 @@ const Posts = () => {
               },
             });
           } catch (error) {
-            console.error('Error displaying notification:', error);
+            toast.show('Error displaying notification.', {
+              type: 'danger',
+              animationType: 'zoom-in',
+            });
           }
         }, 2000);
       } catch (error) {
-        console.error('Error uploading post:', error);
+        toast.show('Error uploading post', {
+          type: 'danger',
+          animationType: 'zoom-in',
+        });
       } finally {
         setIsUploading(false);
         setDescription('');
@@ -115,7 +120,10 @@ const Posts = () => {
         setImagePath(undefined);
       }
     } else {
-      console.warn('No content to post.');
+      toast.show('No content to post', {
+        type: 'danger',
+        animationType: 'zoom-in',
+      });
     }
   };
 
@@ -127,39 +135,46 @@ const Posts = () => {
   }, [routeImagePath]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        {imagePath ? (
-          <View style={styles.imageContainer}>
-            <Image source={{uri: imagePath}} style={styles.image} />
-          </View>
-        ) : (
-          <TouchableOpacity onPress={handleCamera}>
-            <View style={styles.placeholderContainer}>
-              <CameraIcon width={50} height={50} />
+    <ImageBackground
+      source={require('../../assets/w1.jpg')}
+      style={styles.background}>
+      <KeyboardAvoidingView style={styles.background} behavior="padding">
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.container}>
+            <View style={styles.imageContainer}>
+              {imagePath ? (
+                <View style={styles.imageContainer}>
+                  <Image source={{uri: imagePath}} style={styles.image} />
+                </View>
+              ) : (
+                <TouchableOpacity onPress={handleCamera}>
+                  <View style={styles.placeholderContainer}>
+                    <CameraIcon width={80} height={80} />
+                  </View>
+                </TouchableOpacity>
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your post"
+                returnKeyType="send"
+                value={description}
+                onChangeText={text => setDescription(text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Add tags (separated by space)"
+                value={tags}
+                onChangeText={text => setTags(text)}
+              />
+              <CustomButton
+                title={isUploading ? 'Uploading...' : 'Post'}
+                onPress={handlePost}
+              />
             </View>
-          </TouchableOpacity>
-        )}
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your post"
-          // multiline
-          returnKeyType="send"
-          value={description}
-          onChangeText={text => setDescription(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Add tags (separated by space)"
-          value={tags}
-          onChangeText={text => setTags(text)}
-        />
-        <CustomButton
-          title={isUploading ? 'Uploading...' : 'Post'}
-          onPress={handlePost}
-        />
-      </View>
-    </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 

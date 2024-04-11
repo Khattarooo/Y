@@ -15,6 +15,7 @@ import {setUserData} from '../../Redux/slices/userSlice';
 import {useToast} from 'react-native-toast-notifications';
 import axios from 'axios';
 import styles from './LoginStyle';
+import {LogoIconHeader} from '../../Components/Atoms/Icon';
 
 const Login = () => {
   const [username, setUsername] = useState('kminchelle');
@@ -33,8 +34,6 @@ const Login = () => {
         username,
         password,
       });
-      console.log('Token:', result.data.token);
-
       dispatch(setAuthState(true));
       dispatch(
         setUserData({
@@ -71,7 +70,9 @@ const Login = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.container}>
           <View style={styles.content}>
-            <Text style={styles.heading}>Login</Text>
+            <View style={styles.heading}>
+              <LogoIconHeader />
+            </View>
             <TextInput
               style={styles.input}
               placeholder="Username"

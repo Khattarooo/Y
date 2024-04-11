@@ -1,32 +1,22 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   FlatList,
-  StyleSheet,
   ImageBackground,
   RefreshControl,
   Text,
   View,
 } from 'react-native';
 import axios from 'axios';
-import PostCard from '../../Components/Organisime/PostCard';
-
-interface Post {
-  isSaved: boolean;
-  id: string;
-  firstName: string;
-  lastName: string;
-  date: number;
-  description: string;
-  path: string;
-  image: string;
-  tags: string[];
-  time: number;
-}
+import PostCard from '../../Components/Organisime/PostCard/PostCard';
+import {Post} from '../../utils/types';
+import styles from './SavePostStyle';
+import {useToast} from 'react-native-toast-notifications';
 
 const SavedPosts: React.FC = () => {
   const [savedPosts, setSavedPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true); // New state to track loading status
+  const [loading, setLoading] = useState(true);
+  const toast = useToast();
 
   const fetchSavedPosts = useCallback(async () => {
     try {
@@ -37,7 +27,7 @@ const SavedPosts: React.FC = () => {
     } catch (error) {
       setSavedPosts([]);
     } finally {
-      setLoading(false); // Update loading state after fetching posts
+      setLoading(false);
       setRefreshing(false);
     }
   }, []);
@@ -68,9 +58,13 @@ const SavedPosts: React.FC = () => {
         `https://660e99fb356b87a55c4f8cb9.mockapi.io/posts/${postId}`,
         {isSaved: !postToUpdate.isSaved},
       );
+
       console.log('Post saved status updated successfully:', response.data);
     } catch (error) {
-      console.error('Error updating saved post status:', error);
+      toast.show('Error updating saved post status', {
+        type: 'danger',
+        animationType: 'zoom-in',
+      });
     }
   };
 
@@ -97,7 +91,6 @@ const SavedPosts: React.FC = () => {
             path={item.path}
             image={item.image}
             tags={item.tags}
-            username={''}
             id={item.id}
             displayImage={!!item.path}
             displayDescription={!!item.description}
@@ -121,30 +114,5 @@ const SavedPosts: React.FC = () => {
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  listContainer: {
-    padding: 20,
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  centeredContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  noPostsContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  noPostsText: {
-    fontSize: 18,
-    color: '#333',
-  },
-});
 
 export default SavedPosts;

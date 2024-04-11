@@ -1,59 +1,15 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {View, Pressable, Alert} from 'react-native';
+import React from 'react';
+import {View, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Camera, useCameraDevice} from 'react-native-vision-camera';
-import {launchImageLibrary} from 'react-native-image-picker';
-
+import {Camera} from 'react-native-vision-camera';
 import styles from './CameraScreenStyles';
 import CameraIcon from '../../assets/camera.svg';
 import UploadIcon from '../../assets/upload.svg';
-import {useNavigation} from '@react-navigation/native';
-import {useCheckAndOpenCamera} from '../../utils/permissionUtils';
+import {useCameraLogic} from '../../Hooks/useCameraLogic';
 
 const CameraScreen = () => {
-  const device = useCameraDevice('back');
-  const camera = useRef<Camera>(null);
-  const navigation = useNavigation();
-
-  const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const checkAndOpenCamera = useCheckAndOpenCamera();
-
-  useEffect(() => {
-    const openCamera = async () => {
-      const isCameraAccessible = await checkAndOpenCamera();
-      if (isCameraAccessible) {
-        setIsCameraVisible(true);
-      }
-    };
-    openCamera();
-  }, [checkAndOpenCamera]);
-
-  const takePhoto = async () => {
-    if (camera.current) {
-      const photo = await camera.current.takePhoto();
-      console.log(photo.path);
-      navigation.navigate('Posts', {imagePath: `file://${photo.path}`});
-    } else {
-      Alert.alert('Error', 'Camera is not accessible');
-    }
-  };
-
-  const pickImageFromGallery = async () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-      },
-      response => {
-        if (response.assets && response.assets.length > 0) {
-          const selectedImage = response.assets[0];
-          console.log(selectedImage.uri);
-          navigation.navigate('Posts', {imagePath: selectedImage.uri});
-        } else {
-          Alert.alert('Error', 'No image selected');
-        }
-      },
-    );
-  };
+  const {device, camera, isCameraVisible, takePhoto, pickImageFromGallery} =
+    useCameraLogic();
 
   return (
     <SafeAreaView style={styles.container}>
